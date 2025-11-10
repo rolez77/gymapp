@@ -1,14 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Text, View } from 'react-native'
 
-export class profile extends Component {
-  render() {
-    return (
-      <View className="flex-1 justify-center items-center bg-primary">
-        <Text className="text-accent">profile</Text>
-      </View>
-    )
-  }
+const profile = () => {
+  return (
+    <View className="flex-1 bg-secondary">
+      <Text>profile</Text>
+    </View>
+  )
 }
 
 export default profile
