@@ -3,21 +3,23 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 
-// --- Configuration ---
-const calories = 2;  // The current value
-const maxCals = 150; // The max value
-const size = 240;     // The total size of the component (was 120 radius * 2)
+
+type CalCircleProps = {
+  calories: number;
+  maxCals: number;
+}
+const size = 240;
 const strokeWidth = 20;
-const remainingCals = maxCals - calories;
-// ---------------------
+export function CalCircle({calories = 0, maxCals = 20000}: CalCircleProps) {
 
-// --- Calculations ---
-const progressPercentage = (calories / maxCals) * 100;
-const radius = (size - strokeWidth) / 2;
-const circumference = radius * 2 * Math.PI;
-const strokeDashoffset = circumference - (circumference * progressPercentage) / 100;
+  
+  const remainingCals = Math.max(0,maxCals-calories)
 
-export function CalCircle() {
+  const progressPrecentage = Math.max(100, (calories/maxCals)*100)
+
+  const radius = (size-strokeWidth)/2;
+  const circumference = radius * 2 * Math.PI;
+  const strokeDashoffset = circumference - (circumference*progressPrecentage)/100;
   return (
     <View style={{ width: size, height: size }}>
       {/* The SVG container */}

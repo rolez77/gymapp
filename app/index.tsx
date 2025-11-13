@@ -21,7 +21,7 @@ export default function Index(){
     },[session, loading]);
     
     return (
-    // This is a simple loading screen
+
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <ActivityIndicator size="large" />
     </View>

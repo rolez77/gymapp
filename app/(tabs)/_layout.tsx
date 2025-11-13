@@ -1,11 +1,29 @@
 // app/(tabs)/_layout.tsx
 import { Ionicons } from '@expo/vector-icons'; // Example icon library
-import { Tabs } from 'expo-router';
-import React from 'react';
-
+import { Tabs, router } from 'expo-router';
+import React, { useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 
 export default function TabLayout() {
+  const { session, loading } = useAuth();
+  useEffect(() => {
+    if (loading) {
+      return; // Wait until the session is loaded
+    }
+
+    if (!session) {
+      // If session becomes null (after logout),
+      // force redirect to the login screen.
+      router.replace('/(auth)/login');
+    }
+  }, [session, loading]); // Re-run this check every time the session changes
+
+  // 4. Don't show the tabs if we are loading or logging out.
+  // This prevents a "flash" of the app.
+  if (loading || !session) {
+    return null; // Or a loading spinner
+  }
 
 
   return (

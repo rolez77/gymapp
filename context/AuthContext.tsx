@@ -7,10 +7,7 @@ type AuthContextType = {
     loading: boolean;
     signUp:(email:string,
         password:string,
-        username:string,
-        age:number,
-        weight:number,
-        height:number) => Promise<any>;
+        username:string) => Promise<any>;
     signIn:(email:string,password:string) => Promise<any>;
     signOut:() => Promise<any>;
 }
