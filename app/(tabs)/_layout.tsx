@@ -48,7 +48,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index" // This matches app/(tabs)/index.tsx
         options={{
-          title: 'GymBuddy',
+          title: 'Home',
           headerShown: true,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'home' : 'home-outline'} size={28} color={color} />
@@ -66,12 +66,24 @@ export default function TabLayout() {
             }}
         />
 
+        
+
+        <Tabs.Screen
+            name="log" // This matches app/(tabs)/log.tsx
+            options = {{
+                title: 'Log',
+                tabBarIcon: ({ color, focused }) => (
+                    <Ionicons name={focused ? 'book' : 'book-outline'} size={28} color={color} />
+                ),
+            }}
+        />
+
         <Tabs.Screen
             name="settings" // This matches app/(tabs)/log.tsx
             options = {{
                 title: 'Settings',
                 tabBarIcon: ({ color, focused }) => (
-                    <Ionicons name={focused ? 'book' : 'book-outline'} size={28} color={color} />
+                    <Ionicons name={focused ? 'cog' : 'cog-outline'} size={28} color={color} />
                 ),
             }}
         />

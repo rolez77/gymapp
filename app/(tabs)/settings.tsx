@@ -1,14 +1,12 @@
-import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import React from 'react'
+import { ScrollView } from 'react-native'
 
-export class settings extends Component {
-  render() {
-    return (
-      <View>
-        <Text>settings</Text>
-      </View>
-    )
-  }
+const settings = () => {
+  return (
+  <ScrollView className = "bg-secondary">
+
+  </ScrollView>
+  )
 }
 
 export default settings
