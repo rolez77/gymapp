@@ -11,6 +11,18 @@ export default function Index() {
   const[maxCals, setMaxCals] = useState(0);
   const[isLoading, setIsLoading] = useState(true);
 
+  type DailyMacros ={
+    protein: number;
+    fats: number;
+    carbs: number;
+  }
+  const[macroTotals,setMacroTotals] = useState<DailyMacros>({
+    protein:0,
+    carbs:0,
+    fats:0
+  });
+
+
   const fetchCals = async ()=>{
     try{
 
@@ -29,15 +41,24 @@ export default function Index() {
       const tommorow = new Date(today);
       tommorow.setDate(tommorow.getDate() + 1);
 
-      const{data,error} = await supabase.rpc('get_daily_macros',{
-        start_date: today.toISOString(),
-        end_date : tommorow.toISOString()
-      });
-
-      if(error){
-      console.log("Error")
-      }else if(data && data[0]){
-        setCalroies(data[0].total_calories || 0);
+      const{data,error} = await supabase.rpc('get_daily_macros',
+        {
+          start_date: today.toISOString(),
+          end_date: tommorow.toISOString()
+        }
+      );
+      if(error) throw error;
+      if(data && data[0]){
+        const totals = data[0];
+        setCalroies(totals.total_calories || 0);
+        setMacroTotals({
+          protein: totals.total_protein || 0,
+          carbs: totals.total_carbs || 0,
+          fats: totals.total_fat || 0,
+        });
+      }else{
+        setCalroies(0);
+        setMacroTotals({protein: 0, fats: 0, carbs: 0,});
       }
   }catch(error){
     console.log("error");
@@ -68,7 +89,7 @@ export default function Index() {
        
 
        <Text className="pt-10 text-lg text-center text-white"> Macros </Text>
-       <MacroList />
+       <MacroList macros ={macroTotals}/>
       </ScrollView>
       
     </View>

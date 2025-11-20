@@ -1,5 +1,6 @@
 
 import { Camera, CameraView } from 'expo-camera';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Button, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
@@ -84,8 +85,8 @@ export default function SearchScreen(){
       Alert.alert('Error', 'You must be logged in to add food.');
       return;
     }
-
-    const { data, error } = await supabase.from('foods').insert({
+    try{
+    const { data: newFood, error: foodError } = await supabase.from('foods').insert({
       user_id: session.user.id,
       name: foodData.name,
       serving_size_grams: foodData.serving_size,
@@ -94,14 +95,54 @@ export default function SearchScreen(){
       carb_grams: foodData.carbs,
       fat_grams: foodData.fat,
       sugar_grams: foodData.sugar,
-    });
+    })
+    .select('id') // CRITICAL: Gets the ID of the new food item
+    .single();
 
-    if (error) {
-      Alert.alert('Save Failed', error.message);
+
+
+    if (foodError) {
+      Alert.alert('Save Failed', foodError.message);
     } else {
       Alert.alert('Success!', `${foodData.name} was added to your food library.`);
     }
+    if(!newFood){ throw new Error("Err")};
+
+
+     const {error: logError} = await supabase.from('food_logs').
+    insert(
+      {
+        user_id: session?.user.id,
+        food_id: newFood.id,
+        quantity: 1.0,
+        created_at: new Date().toISOString,
+      }
+    );
+    if(logError){
+      throw logError;
+    }
+
+    Alert.alert(
+        'Success!', 
+        `${foodData.name} added to library and logged for today.`,
+        [
+          { 
+            text: 'OK', 
+            onPress: () => {
+              // This pushes back to the home tab, triggering the re-fetch
+              router.replace('/(tabs)'); 
+            }
+          }
+        ]
+      );
+    }catch(error){
+        Alert.alert("Save failed");
+    } 
+
+
   };
+
+ 
 
   if (isScannerVisible) {
     return (

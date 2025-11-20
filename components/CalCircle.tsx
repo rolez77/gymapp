@@ -13,7 +13,7 @@ const strokeWidth = 20;
 export function CalCircle({calories = 0, maxCals = 20000}: CalCircleProps) {
 
   
-  const remainingCals = Math.max(0,maxCals-calories)
+  const remainingCals = Math.round(maxCals-calories)
 
   const progressPrecentage = Math.max(100, (calories/maxCals)*100)
 
